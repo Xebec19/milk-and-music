@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+     plugins: {
+      "jsx-a11y": require("eslint-plugin-jsx-a11y"),
+    },
+    rules: {
+      "jsx-a11y/alt-text": "error",
+      "jsx-a11y/no-autofocus": "warn",
+    },
+  }
 ]);
 
 export default eslintConfig;
