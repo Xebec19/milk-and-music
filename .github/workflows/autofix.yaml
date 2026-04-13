@@ -1,32 +1,30 @@
-name: autofix.ci # needs to use this name
-
+name: autofix.ci
 on:
   pull_request:
   push:
     branches: ["main"]
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   autofix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v6
-
-      - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
-          cache: pnpm
+          version: 9
 
-      # Or yarn, npm, etc.
-      - run: pnpm install --frozen-lockfile
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
 
-      # Run oxfmt to write changes, autofix.ci will commit them if there are any differences.
-      # Be sure to add a `fmt` script to your `package.json` if you haven't already.
-      - run: pnpm run fmt
+      - run: pnpm install
 
-      # NOTE: It is strongly recommended to use the latest SHA hash for this action instead of the version number. (See https://autofix.ci/setup for more details.)
+      - run: pnpm run lint:fix
+
       - uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8
